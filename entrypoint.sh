@@ -3,46 +3,42 @@
 set -Eeuo pipefail
 
 # TODO: move all mkdir -p ?
-mkdir -p /data/config/auto/scripts/
+mkdir -p /mnt/auto/sd/scripts/
 # mount scripts individually
 find "${ROOT}/scripts/" -maxdepth 1 -type l -delete
-cp -vrfTs /data/config/auto/scripts/ "${ROOT}/scripts/"
+cp -vrfTs /mnt/auto/sd/scripts/ "${ROOT}/scripts/"
 
-cp -n /docker/config.json /data/config/auto/config.json
-jq '. * input' /data/config/auto/config.json /docker/config.json | sponge /data/config/auto/config.json
+cp -n /docker/config.json /mnt/auto/sd/config.json
+jq '. * input' /mnt/auto/sd/config.json /docker/config.json | sponge /mnt/auto/sd/config.json
 
-if [ ! -f /data/config/auto/ui-config.json ]; then
-  echo '{}' >/data/config/auto/ui-config.json
+if [ ! -f /mnt/auto/sd/ui-config.json ]; then
+  echo '{}' >/mnt/auto/sd/ui-config.json
 fi
 
 declare -A MOUNTS
 
-MOUNTS["/root/.cache"]="/data/.cache"
+MOUNTS["/root/.cache"]="/mnt/auto/sd/.cache"
 
-# main
-MOUNTS["${ROOT}/models/Stable-diffusion"]="/data/StableDiffusion"
-MOUNTS["${ROOT}/models/VAE"]="/data/VAE"
-MOUNTS["${ROOT}/models/Codeformer"]="/data/Codeformer"
-MOUNTS["${ROOT}/models/GFPGAN"]="/data/GFPGAN"
-MOUNTS["${ROOT}/models/ESRGAN"]="/data/ESRGAN"
-MOUNTS["${ROOT}/models/BSRGAN"]="/data/BSRGAN"
-MOUNTS["${ROOT}/models/RealESRGAN"]="/data/RealESRGAN"
-MOUNTS["${ROOT}/models/SwinIR"]="/data/SwinIR"
-MOUNTS["${ROOT}/models/ScuNET"]="/data/ScuNET"
-MOUNTS["${ROOT}/models/LDSR"]="/data/LDSR"
-MOUNTS["${ROOT}/models/hypernetworks"]="/data/Hypernetworks"
-MOUNTS["${ROOT}/models/torch_deepdanbooru"]="/data/Deepdanbooru"
-MOUNTS["${ROOT}/models/BLIP"]="/data/BLIP"
-MOUNTS["${ROOT}/models/midas"]="/data/MiDaS"
-MOUNTS["${ROOT}/models/Lora"]="/data/Lora"
 
-MOUNTS["${ROOT}/embeddings"]="/data/embeddings"
-MOUNTS["${ROOT}/config.json"]="/data/config/auto/config.json"
-MOUNTS["${ROOT}/ui-config.json"]="/data/config/auto/ui-config.json"
-MOUNTS["${ROOT}/extensions"]="/data/config/auto/extensions"
+MOUNTS["${ROOT}/models"]="/mnt/auto/sd/models"
+
+MOUNTS["${ROOT}/localizations"]="/mnt/auto/sd/localizations"
+
+MOUNTS["${ROOT}/configs"]="/mnt/auto/sd/configs"
+
+MOUNTS["${ROOT}/extensions-builtin"]="/mnt/auto/sd/extensions-builtin"
+
+
+MOUNTS["${ROOT}/embeddings"]="/mnt/auto/sd/embeddings"
+MOUNTS["${ROOT}/config.json"]="/mnt/auto/sd/config.json"
+MOUNTS["${ROOT}/ui-config.json"]="/mnt/auto/sd/ui-config.json"
+MOUNTS["${ROOT}/extensions"]="/mnt/auto/sd/extensions"
+MOUNTS["${ROOT}/outputs"]="/mnt/auto/sd/outputs"
+# MOUNTS["${ROOT}/javascript"]="/mnt/auto/sd/javascript"
+# MOUNTS["${ROOT}/html"]="/mnt/auto/sd/html"
 
 # extra hacks
-MOUNTS["${ROOT}/repositories/CodeFormer/weights/facelib"]="/data/.cache"
+MOUNTS["${ROOT}/repositories/CodeFormer/weights/facelib"]="/mnt/auto/sd/.cache"
 
 for to_path in "${!MOUNTS[@]}"; do
   set -Eeuo pipefail
@@ -56,9 +52,9 @@ for to_path in "${!MOUNTS[@]}"; do
   echo Mounted $(basename "${from_path}")
 done
 
-if [ -f "/data/config/auto/startup.sh" ]; then
+if [ -f "/mnt/auto/sd/startup.sh" ]; then
   pushd ${ROOT}
-  . /data/config/auto/startup.sh
+  . /mnt/auto/sd/startup.sh
   popd
 fi
 
