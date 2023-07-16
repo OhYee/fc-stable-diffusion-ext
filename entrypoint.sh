@@ -17,22 +17,22 @@ fi
 
 declare -A MOUNTS
 
-MOUNTS["/root/.cache"]="/mnt/auto/sd/.cache"
+# MOUNTS["/root/.cache"]="/mnt/auto/sd/.cache"
 
 
-MOUNTS["${ROOT}/models"]="/mnt/auto/sd/models"
+# MOUNTS["${ROOT}/models"]="/mnt/auto/sd/models"
 
-MOUNTS["${ROOT}/localizations"]="/mnt/auto/sd/localizations"
+# MOUNTS["${ROOT}/localizations"]="/mnt/auto/sd/localizations"
 
-MOUNTS["${ROOT}/configs"]="/mnt/auto/sd/configs"
+# MOUNTS["${ROOT}/configs"]="/mnt/auto/sd/configs"
 
-MOUNTS["${ROOT}/extensions-builtin"]="/mnt/auto/sd/extensions-builtin"
+# MOUNTS["${ROOT}/extensions-builtin"]="/mnt/auto/sd/extensions-builtin"
 
 
-MOUNTS["${ROOT}/embeddings"]="/mnt/auto/sd/embeddings"
-MOUNTS["${ROOT}/config.json"]="/mnt/auto/sd/config.json"
-MOUNTS["${ROOT}/ui-config.json"]="/mnt/auto/sd/ui-config.json"
-MOUNTS["${ROOT}/extensions"]="/mnt/auto/sd/extensions"
+# MOUNTS["${ROOT}/embeddings"]="/mnt/auto/sd/embeddings"
+# MOUNTS["${ROOT}/config.json"]="/mnt/auto/sd/config.json"
+# MOUNTS["${ROOT}/ui-config.json"]="/mnt/auto/sd/ui-config.json"
+# MOUNTS["${ROOT}/extensions"]="/mnt/auto/sd/extensions"
 MOUNTS["${ROOT}/outputs"]="/mnt/auto/sd/outputs"
 # MOUNTS["${ROOT}/javascript"]="/mnt/auto/sd/javascript"
 # MOUNTS["${ROOT}/html"]="/mnt/auto/sd/html"

@@ -21,6 +21,11 @@ RUN apk add --no-cache aria2
 RUN aria2c -x 5 --dir / --out wheel.whl 'https://github.com/AbdBarho/stable-diffusion-webui-docker/releases/download/5.0.3/xformers-0.0.20.dev528-cp310-cp310-manylinux2014_x86_64-pytorch2.whl'
 
 
+FROM alpine:3.17 as models
+RUN apk add --no-cache aria2
+RUN aria2c -x 5 --dir "/" --out "sd-v1-5-inpainting.ckpt" "https://huggingface.co/runwayml/stable-diffusion-inpainting/resolve/main/sd-v1-5-inpainting.ckpt"
+
+
 FROM python:3.10.9-slim
 
 ENV DEBIAN_FRONTEND=noninteractive PIP_PREFER_BINARY=1
@@ -79,12 +84,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 RUN --mount=type=cache,target=/root/.cache/pip  pip install -U opencv-python-headless
 
-RUN apt install aria2 -y
-RUN mkdir -p "/stable-diffusion-webui/models/Stable-diffusion"
-RUN aria2c -x 5 --dir "/stable-diffusion-webui/models/Stable-diffusion" --out "v1-5-pruned-emaonly.safetensors" "https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors"
-
+RUN mkdir -p /stable-diffusion-webui/models/Stable-diffusion
+COPY --from=models /sd-v1-5-inpainting.ckpt /stable-diffusion-webui/models/Stable-diffusion/sd-v1-5-inpainting.ckpt
+COPY sd-resource/* ${ROOT}/
 COPY . /docker
-
 
 RUN \
     python3 /docker/info.py ${ROOT}/modules/ui.py && \
