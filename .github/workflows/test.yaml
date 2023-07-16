@@ -37,7 +37,18 @@ jobs:
         # run: |
         #   ls
         #   python hub-publish.py
+
+        # shell if 正则表达式匹配
         run: |
-          echo "tag_name $tag_name"
-          echo "release_body $release_body"
-          echo "release_name $release_name"
+          if [[ -n $(echo "$release_name" | grep -P 'fc-stable-diffusion(?!-)') ]]; then
+              echo release fc-stable-diffusion
+          fi
+
+          if [[ -n $(echo "$release_name" | grep -P 'fc-stable-diffusion-plus') ]]; then
+              echo release fc-stable-diffusion-plus
+          fi
+
+          if [[ -n $(echo "$release_name" | grep -P 'fc-stable-diffusion-api') ]]; then
+              echo release fc-stable-diffusion-api
+          fi
+
